@@ -171,6 +171,19 @@ const checkTwo = async () => {
         setData(data);
         console.log(data);
         setZeroLoading(false);
+        for(let i=0;i<data.urlresponse_list.length;i++){
+            if(data.urlresponse_list[i].similarity*100>15){
+                toast({
+                    title: "Error!",
+                    description:
+                        "Plagiarism Found in one of the sources, Please Reduce and Check Again",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                });
+                return;
+            }
+        }
         if(data.google_similarity_score>0.2){
             toast({
                 title: "Error!",
@@ -300,27 +313,34 @@ const checkTwo = async () => {
                                                     flex="1"
                                                     textAlign="left"
                                                 >
-                                                    Level One Plagiarism Report{" "}
-                                                    {"( " +
-                                                        levelOneData.mean.toFixed(
-                                                            2
-                                                        ) +
-                                                        "%" +
-                                                        " )"}
+                                                    Level One Plagiarism Report
+                                                    {" ( "}
+                                                    {(levelOneData.mean != null
+                                                        ? levelOneData.mean.toFixed(
+                                                              2
+                                                          )
+                                                        : "0") + "%" + " )"}
                                                 </Box>
                                                 <AccordionIcon />
                                             </AccordionButton>
                                         </h2>
                                         <AccordionPanel pb={4}>
                                             <VStack align="left">
-                                                {levelOneData != null &&
+                                                {levelOneData.data !== null &&
                                                     levelOneData.data.map(
                                                         (u) => {
                                                             return (
                                                                 <HStack>
-                                                                    <Text>
-                                                                        {u.id}
-                                                                    </Text>
+                                                                    <Link
+                                                                        href={
+                                                                            "http://localhost:3000/paper/" +
+                                                                            u.id
+                                                                        }
+                                                                        target="_blank"
+                                                                    >
+                                                                        {"http://localhost:3000/paper/" +
+                                                                            u.id}
+                                                                    </Link>
                                                                     <Spacer />
                                                                     <Tag
                                                                         colorScheme={
@@ -368,13 +388,8 @@ const checkTwo = async () => {
                                                     flex="1"
                                                     textAlign="left"
                                                 >
-                                                    Level Two Plagiarism Report{" "}
-                                                    {"( " +
-                                                        levelTwoData.mean.toFixed(
-                                                            2
-                                                        ) +
-                                                        "%" +
-                                                        " )"}
+                                                    Level Two Plagiarism Report{" ( "}
+                                                    {(levelTwoData.mean != null? levelTwoData.mean.toFixed(2): "0") + "%" + " )"}
                                                 </Box>
                                                 <AccordionIcon />
                                             </AccordionButton>
